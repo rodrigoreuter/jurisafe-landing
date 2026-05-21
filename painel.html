@@ -35,14 +35,16 @@
     </div>
 
     <script>
-        // Credenciais reais extraídas do seu index.html
         const supabaseUrl = 'https://fnejypecaqxwnapxwwaw.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZWp5cGVjYXF4d25hcHh3d2F3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzc4NTYsImV4cCI6MjA5NDk1Mzg1Nn0.trQXjYVvRvzw86mmnCZg37wE62vm7dWGUk24FPHP5Nc';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // Mudamos o nome da variável para supabaseClient
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         async function carregarDados() {
             try {
-                const { data, error } = await supabase
+                // Usamos a variável nova aqui
+                const { data, error } = await supabaseClient
                     .from('pesquisa_jurisafe')
                     .select('*')
                     .order('criado_em', { ascending: false });

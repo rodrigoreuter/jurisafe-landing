@@ -105,12 +105,12 @@
             </button>
         </form>
     </main>
-
-    
     <script>
         const supabaseUrl = 'https://fnejypecaqxwnapxwwaw.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZWp5cGVjYXF4d25hcHh3d2F3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzc4NTYsImV4cCI6MjA5NDk1Mzg1Nn0.trQXjYVvRvzw86mmnCZg37wE62vm7dWGUk24FPHP5Nc';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // Mudamos o nome da variável para supabaseClient
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         document.getElementById('pesquisaForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -128,7 +128,8 @@
                 email_contato: document.getElementById('email').value
             };
 
-            const { data, error } = await supabase.from('pesquisa_jurisafe').insert([dados]);
+            // Usamos a variável nova aqui
+            const { data, error } = await supabaseClient.from('pesquisa_jurisafe').insert([dados]);
 
             if (error) {
                 alert('Erro ao enviar dados. Tente novamente.');
@@ -142,5 +143,7 @@
             }
         });
     </script>
+    
+    
 </body>
 </html>
