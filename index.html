@@ -7,18 +7,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
-    </style>
+    <style>body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }</style>
 </head>
 <body class="antialiased min-h-screen relative overflow-x-hidden">
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none"></div>
 
     <header class="w-full max-w-5xl mx-auto px-6 py-6 flex justify-between items-center relative z-10">
         <div class="flex items-center gap-2">
-            <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-            </svg>
+            <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
             <span class="text-2xl font-bold tracking-tight">JuriSafe</span>
         </div>
         <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs px-3 py-1.5 rounded-full font-medium">🚀 Validação</span>
@@ -27,11 +23,10 @@
     <main class="w-full max-w-3xl mx-auto px-6 py-12 relative z-10">
         <div class="text-center mb-12">
             <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">Proteja seu escritório contra <span class="text-blue-500">golpes no WhatsApp.</span></h1>
-            <p class="text-lg text-slate-400">Ajude-nos a calibrar a ferramenta respondendo a 4 perguntas rápidas.</p>
+            <p class="text-lg text-slate-400">Ajude-nos a calibrar a ferramenta respondendo a estas perguntas rápidas.</p>
         </div>
 
         <form id="pesquisaForm" class="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl backdrop-blur-sm space-y-6">
-            
             <div id="msgSucesso" class="hidden bg-green-500/20 border border-green-500 text-green-400 p-4 rounded-lg text-center font-medium">
                 Respostas enviadas com sucesso! Muito obrigado pela contribuição.
             </div>
@@ -43,6 +38,7 @@
                     <option value="Autônomo">Advogado Autônomo</option>
                     <option value="Pequeno (2-5)">Pequeno (2 a 5 pessoas)</option>
                     <option value="Médio (6-15)">Médio (6 a 15 pessoas)</option>
+                    <option value="Grande (+15)">Grande (Mais de 15 pessoas)</option>
                 </select>
             </div>
 
@@ -57,22 +53,45 @@
             </div>
 
             <div class="form-group">
-                <label class="block text-sm font-medium text-slate-300 mb-2">3. Qual formato os clientes mais usariam para checar se um número é de fato do seu escritório?</label>
-                <select id="formato" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-slate-200 focus:border-blue-500 focus:outline-none" required>
+                <label class="block text-sm font-medium text-slate-300 mb-2">3. Imagine um sistema onde seu escritório cadastra os números oficiais. Se o cliente receber uma mensagem suspeita, ele envia esse número para um "Bot de Verificação" no WhatsApp e recebe na hora a confirmação se é o seu escritório ou um golpista. Quão útil isso seria?</label>
+                <select id="utilidade" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-slate-200 focus:border-blue-500 focus:outline-none" required>
                     <option value="">Selecione...</option>
-                    <option value="Bot no WhatsApp">Bot no WhatsApp (encaminhar o contato)</option>
-                    <option value="Site simples">Site simples (digitar o número)</option>
-                    <option value="Aplicativo">Aplicativo no celular</option>
+                    <option value="Muito útil - Usaria com certeza">Muito útil – Usaria com certeza.</option>
+                    <option value="Útil - Precisaria entender na prática">Útil – Mas precisaria entender como funciona na prática.</option>
+                    <option value="Pouco útil - Clientes não usariam">Pouco útil – Acho que meus clientes não usariam.</option>
+                    <option value="Nada útil - Não vejo necessidade">Nada útil – Não vejo necessidade.</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label class="block text-sm font-medium text-slate-300 mb-2">4. Quanto você estaria disposto a investir mensalmente por essa proteção?</label>
+                <label class="block text-sm font-medium text-slate-300 mb-2">4. Na sua opinião, qual formato teria maior adesão por parte dos seus clientes para verificar um contato?</label>
+                <select id="formato" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-slate-200 focus:border-blue-500 focus:outline-none" required>
+                    <option value="">Selecione...</option>
+                    <option value="Bot no WhatsApp">Um número de WhatsApp (Bot) para o qual o cliente manda mensagem.</option>
+                    <option value="Site simples">Um site simples e direto onde o cliente digita o número.</option>
+                    <option value="Aplicativo">Um Aplicativo (Android/iOS) para baixar no celular.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-slate-300 mb-2">5. Você acredita que oferecer um selo ou código de "Contato Verificado pela OAB" transmitiria mais autoridade e segurança para fechar contratos?</label>
+                <select id="selo" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-slate-200 focus:border-blue-500 focus:outline-none" required>
+                    <option value="">Selecione...</option>
+                    <option value="Sim, com certeza">Sim, com certeza.</option>
+                    <option value="Talvez, ajuda mas não é decisivo">Talvez, ajuda mas não é decisivo.</option>
+                    <option value="Não faria diferença">Não faria diferença.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-slate-300 mb-2">6. Quanto você estaria disposto a investir mensalmente por essa proteção?</label>
                 <select id="valor" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-slate-200 focus:border-blue-500 focus:outline-none" required>
                     <option value="">Selecione...</option>
                     <option value="Até 49,90">Até R$ 49,90/mês</option>
                     <option value="50 a 99,90">De R$ 50 a R$ 99,90/mês</option>
-                    <option value="Mais de 100">Mais de R$ 100/mês</option>
+                    <option value="100 a 199,90">De R$ 100 a R$ 199,90/mês</option>
+                    <option value="Mais de 200">Mais de R$ 200/mês</option>
+                    <option value="Não pagaria">Não pagaria por esse serviço</option>
                 </select>
             </div>
 
@@ -88,7 +107,6 @@
     </main>
 
     <script>
-        // CONFIGURAÇÃO SUPABASE
         const supabaseUrl = 'https://fnejypecaqxwnapxwwaw.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZWp5cGVjYXF4d25hcHh3d2F3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzc4NTYsImV4cCI6MjA5NDk1Mzg1Nn0.trQXjYVvRvzw86mmnCZg37wE62vm7dWGUk24FPHP5Nc';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -102,7 +120,9 @@
             const dados = {
                 tamanho_escritorio: document.getElementById('tamanho').value,
                 ja_teve_golpe: document.getElementById('golpe').value,
+                utilidade_sistema: document.getElementById('utilidade').value,
                 formato_ideal: document.getElementById('formato').value,
+                selo_oab: document.getElementById('selo').value,
                 valor_pagaria: document.getElementById('valor').value,
                 email_contato: document.getElementById('email').value
             };
