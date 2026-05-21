@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | JuriSafe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>body { background-color: #0f172a; color: #f8fafc; }</style>
+</head>
+<body class="p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-2">Painel de Validação - JuriSafe</h1>
+        <p class="text-slate-400 mb-8">Total de respostas: <span id="totalRespostas" class="text-blue-500 font-bold text-xl">0</span></p>
+
+        <div class="bg-slate-800 rounded-lg overflow-hidden border border-slate-700">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-slate-900 border-b border-slate-700">
+                    <tr>
+                        <th class="p-4">Data</th>
+                        <th class="p-4">Tamanho</th>
+                        <th class="p-4">Já teve Golpe?</th>
+                        <th class="p-4">Formato Ideal</th>
+                        <th class="p-4">Pagaria</th>
+                        <th class="p-4">Email</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaCorpo" class="divide-y divide-slate-700">
+                    <tr><td colspan="6" class="p-4 text-center text-slate-500">Carregando dados...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO SUPABASE
+        const supabaseUrl = 'https://fnejypecaqxwnapxwwaw.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZWp5cGVjYXF4d25hcHh3d2F3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzc4NTYsImV4cCI6MjA5NDk1Mzg1Nn0.trQXjYVvRvzw86mmnCZg37wE62vm7dWGUk24FPHP5Nc';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function carregarDados() {
+            const { data, error } = await supabase
+                .from('pesquisa_jurisafe')
+                .select('*')
+                .order('criado_em', { ascending: false });
+
+            if (error) return console.error(error);
+
+            document.getElementById('totalRespostas').innerText = data.length;
+            const tbody = document.getElementById('tabelaCorpo');
+            tbody.innerHTML = '';
+
+            data.forEach(linha => {
+                const dataFormatada = new Date(linha.criado_em).toLocaleDateString('pt-BR');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-4 text-slate-400">${dataFormatada}</td>
+                    <td class="p-4">${linha.tamanho_escritorio}</td>
+                    <td class="p-4">${linha.ja_teve_golpe}</td>
+                    <td class="p-4">${linha.formato_ideal}</td>
+                    <td class="p-4 font-medium text-green-400">${linha.valor_pagaria}</td>
+                    <td class="p-4 text-blue-400">${linha.email_contato || '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        carregarDados();
+    </script>
+</body>
+</html>

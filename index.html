@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JuriSafe | Validação da Plataforma</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative overflow-x-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none"></div>
+
+    <header class="w-full max-w-5xl mx-auto px-6 py-6 flex justify-between items-center relative z-10">
+        <div class="flex items-center gap-2">
+            <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+            <span class="text-2xl font-bold tracking-tight">JuriSafe</span>
+        </div>
+        <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs px-3 py-1.5 rounded-full font-medium">🚀 Validação</span>
+    </header>
+
+    <main class="w-full max-w-3xl mx-auto px-6 py-12 relative z-10">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">Proteja seu escritório contra <span class="text-blue-500">golpes no WhatsApp.</span></h1>
+            <p class="text-lg text-slate-400">Ajude-nos a calibrar a ferramenta respondendo a 4 perguntas rápidas.</p>
+        </div>
+
+        <form id="pesquisaForm" class="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl backdrop-blur-sm space-y-6">
+            
+            <div id="msgSucesso" class="hidden bg-green-500/20 border border-green-500 text-green-400 p-4 rounded-lg text-center font-medium">
+                Respostas enviadas com sucesso! Muito obrigado pela contribuição.
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-slate-300 mb-2">1. Qual o tamanho do seu escritório hoje?</label>
+                <select id="tamanho" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-slate-200 focus:border-blue-500 focus:outline-none" required>
+                    <option value="">Selecione...</option>
+                    <option value="Autônomo">Advogado Autônomo</option>
+                    <option value="Pequeno (2-5)">Pequeno (2 a 5 pessoas)</option>
+                    <option value="Médio (6-15)">Médio (6 a 15 pessoas)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-slate-300 mb-2">2. Você ou colegas já tiveram o nome/foto usados em golpes de WhatsApp?</label>
+                <select id="golpe" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-slate-200 focus:border-blue-500 focus:outline-none" required>
+                    <option value="">Selecione...</option>
+                    <option value="Sim, no meu escritório">Sim, já aconteceu com meu escritório</option>
+                    <option value="Conheço colegas que passaram">Não comigo, mas conheço colegas que passaram</option>
+                    <option value="Nunca aconteceu">Nunca aconteceu</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-slate-300 mb-2">3. Qual formato os clientes mais usariam para checar se um número é de fato do seu escritório?</label>
+                <select id="formato" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-slate-200 focus:border-blue-500 focus:outline-none" required>
+                    <option value="">Selecione...</option>
+                    <option value="Bot no WhatsApp">Bot no WhatsApp (encaminhar o contato)</option>
+                    <option value="Site simples">Site simples (digitar o número)</option>
+                    <option value="Aplicativo">Aplicativo no celular</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-slate-300 mb-2">4. Quanto você estaria disposto a investir mensalmente por essa proteção?</label>
+                <select id="valor" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-slate-200 focus:border-blue-500 focus:outline-none" required>
+                    <option value="">Selecione...</option>
+                    <option value="Até 49,90">Até R$ 49,90/mês</option>
+                    <option value="50 a 99,90">De R$ 50 a R$ 99,90/mês</option>
+                    <option value="Mais de 100">Mais de R$ 100/mês</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-slate-300 mb-2">Gostaria de receber acesso antecipado? (Opcional)</label>
+                <input type="email" id="email" placeholder="seu@email.com" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-slate-200 focus:border-blue-500 focus:outline-none">
+            </div>
+
+            <button type="submit" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-4 px-8 rounded-lg shadow-lg transition-all duration-200">
+                Enviar Respostas
+            </button>
+        </form>
+    </main>
+
+    <script>
+        // CONFIGURAÇÃO SUPABASE
+        const supabaseUrl = 'https://fnejypecaqxwnapxwwaw.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZWp5cGVjYXF4d25hcHh3d2F3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzc4NTYsImV4cCI6MjA5NDk1Mzg1Nn0.trQXjYVvRvzw86mmnCZg37wE62vm7dWGUk24FPHP5Nc';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        document.getElementById('pesquisaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            btn.innerText = 'Enviando...';
+            btn.disabled = true;
+
+            const dados = {
+                tamanho_escritorio: document.getElementById('tamanho').value,
+                ja_teve_golpe: document.getElementById('golpe').value,
+                formato_ideal: document.getElementById('formato').value,
+                valor_pagaria: document.getElementById('valor').value,
+                email_contato: document.getElementById('email').value
+            };
+
+            const { data, error } = await supabase.from('pesquisa_jurisafe').insert([dados]);
+
+            if (error) {
+                alert('Erro ao enviar dados. Tente novamente.');
+                console.error(error);
+                btn.innerText = 'Enviar Respostas';
+                btn.disabled = false;
+            } else {
+                document.getElementById('pesquisaForm').reset();
+                document.querySelectorAll('.form-group, #btnSubmit').forEach(el => el.style.display = 'none');
+                document.getElementById('msgSucesso').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
