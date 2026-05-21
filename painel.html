@@ -35,37 +35,48 @@
     </div>
 
     <script>
+        // Credenciais reais extraídas do seu index.html
         const supabaseUrl = 'https://fnejypecaqxwnapxwwaw.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZWp5cGVjYXF4d25hcHh3d2F3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzc4NTYsImV4cCI6MjA5NDk1Mzg1Nn0.trQXjYVvRvzw86mmnCZg37wE62vm7dWGUk24FPHP5Nc';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         async function carregarDados() {
-            const { data, error } = await supabase
-                .from('pesquisa_jurisafe')
-                .select('*')
-                .order('criado_em', { ascending: false });
+            try {
+                const { data, error } = await supabase
+                    .from('pesquisa_jurisafe')
+                    .select('*')
+                    .order('criado_em', { ascending: false });
 
-            if (error) return console.error(error);
+                if (error) throw error;
 
-            document.getElementById('totalRespostas').innerText = data.length;
-            const tbody = document.getElementById('tabelaCorpo');
-            tbody.innerHTML = '';
+                document.getElementById('totalRespostas').innerText = data.length;
+                const tbody = document.getElementById('tabelaCorpo');
+                tbody.innerHTML = '';
 
-            data.forEach(linha => {
-                const dataFormatada = new Date(linha.criado_em).toLocaleDateString('pt-BR');
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="p-4 text-slate-400">${dataFormatada}</td>
-                    <td class="p-4">${linha.tamanho_escritorio || '-'}</td>
-                    <td class="p-4">${linha.ja_teve_golpe || '-'}</td>
-                    <td class="p-4">${linha.utilidade_sistema || '-'}</td>
-                    <td class="p-4">${linha.formato_ideal || '-'}</td>
-                    <td class="p-4">${linha.selo_oab || '-'}</td>
-                    <td class="p-4 font-medium text-green-400">${linha.valor_pagaria || '-'}</td>
-                    <td class="p-4 text-blue-400">${linha.email_contato || '-'}</td>
-                `;
-                tbody.appendChild(tr);
-            });
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-slate-500">Nenhum dado encontrado ainda. Faça um envio de teste!</td></tr>';
+                    return;
+                }
+
+                data.forEach(linha => {
+                    const dataFormatada = new Date(linha.criado_em).toLocaleDateString('pt-BR');
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="p-4 text-slate-400">${dataFormatada}</td>
+                        <td class="p-4">${linha.tamanho_escritorio || '-'}</td>
+                        <td class="p-4">${linha.ja_teve_golpe || '-'}</td>
+                        <td class="p-4">${linha.utilidade_sistema || '-'}</td>
+                        <td class="p-4">${linha.formato_ideal || '-'}</td>
+                        <td class="p-4">${linha.selo_oab || '-'}</td>
+                        <td class="p-4 font-medium text-green-400">${linha.valor_pagaria || '-'}</td>
+                        <td class="p-4 text-blue-400">${linha.email_contato || '-'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error('Erro ao buscar dados do Supabase:', err);
+                document.getElementById('tabelaCorpo').innerHTML = `<tr><td colspan="8" class="p-4 text-center text-red-400 font-medium">Erro ao carregar dados. Verifique o console (F12) ou as políticas de RLS da tabela.</td></tr>`;
+            }
         }
         carregarDados();
     </script>
